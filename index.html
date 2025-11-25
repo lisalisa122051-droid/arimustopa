@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liviaa Store - Digital Services</title>
+    <title>Riiz - Devz - Digital Services</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,6 +49,7 @@
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         nav { display: flex; justify-content: space-between; align-items: center; }
 
+        /* REVISI: Logo Name */
         .logo {
             font-family: 'Orbitron', sans-serif;
             font-size: 1.5rem;
@@ -239,6 +240,17 @@
             font-family: 'Montserrat', sans-serif;
         }
 
+        /* New: File Input Styling */
+        .custom-file-input {
+            width: 100%;
+            padding: 10px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
         /* --- QRIS FIX CSS --- */
         .qris-container-wrapper {
             background: #fff;
@@ -299,12 +311,12 @@
 
         /* Warning State Styles */
         .status-icon.warning {
-            color: var(--color-warning);
+            color: var(--neon-pink); 
             animation: pulse-warn 1s infinite alternate;
         }
 
         .status-text-display.warning {
-            color: var(--color-warning);
+            color: var(--neon-pink);
         }
         
         @keyframes pulse-warn {
@@ -339,7 +351,7 @@
     <header>
         <div class="container">
             <nav>
-                <div class="logo">LIVIAA STORE</div>
+                <div class="logo">RIIZ - DEVZ</div>
                 <div style="font-size: 0.8rem; color: var(--neon-blue);">OFFICIAL</div>
             </nav>
         </div>
@@ -388,7 +400,7 @@
             </div>
 
             <div class="hologram-card">
-                <span class="card-number">05</span>
+                <span class="card-number">05</span
                 <h3>SCRIPT NO ENC</h3>
                 <div class="desc">Source code murni tanpa enkripsi. Mudah diedit.</div>
                 <span class="price-tag">Lihat List Harga</span>
@@ -448,7 +460,7 @@
 
     <section class="services">
         <div class="container">
-            <h2 class="section-header">LAYANAN PUSAT BANTUAN LIVA</h2>
+            <h2 class="section-header">LAYANAN PUSAT BANTUAN RIIZ - DEVZ</h2>
             <div class="service-row">
                 <div class="service-btn" onclick="startLiveChat()">
                     <i class="fa-solid fa-headset"></i>
@@ -458,7 +470,7 @@
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <h4>CEK PESANAN</h4>
                 </div>
-                <div class="service-btn" onclick="openGroup()">
+                <div class="service-btn" onclick="window.open('https://chat.whatsapp.com/EP2Q3qQ4ZOk9i66EzzTG25?mode=hqrc', '_blank')">
                     <i class="fa-brands fa-whatsapp"></i>
                     <h4>OFFICIAL GROUP</h4>
                 </div>
@@ -490,13 +502,16 @@
             <p style="font-size: 0.8rem; color: #aaa;">Scan QRIS di bawah ini</p>
             
             <div class="qris-container-wrapper">
-                <img src="https://files.catbox.moe/imp6n1.jpg" alt="QRIS Payment" class="qris-img">
+                <img src="https://img1.pixhost.to/images/10413/664491365_nuxoffc.jpg" alt="QRIS Payment" class="qris-img">
             </div>
             
             <p style="font-size: 0.9rem;">Total: <span id="finalPrice" style="color: var(--neon-blue); font-weight: bold;">Rp 0</span></p>
             
             <div id="orderIdDisplay" class="generated-id">GENERATING...</div>
             
+            <h4 style="color: var(--neon-blue); margin-top: 20px; font-size: 0.9rem;">UPLOAD BUKTI TRANSFER</h4>
+            <input type="file" id="proofUpload" accept="image/*" class="custom-file-input" onchange="handleImageUpload(event)" required>
+            <p id="uploadStatus" style="color: var(--neon-pink); font-size: 0.75rem; min-height: 15px; margin-top: 5px;">(Wajib unggah. Maks 5MB)</p>
             <button class="btn-action" style="background: var(--neon-pink); border: none;" onclick="startWAConfirmation()">
                 KONFIRMASI WA
             </button>
@@ -534,16 +549,16 @@
     </div>
 
     <div class="watermark">
-        Dibuat oleh <strong>Livia</strong> dengan device <span class="highlight">Apple iOS 26</span> (<span class="highlight">iPhone 14 Pro</span>)<br>
-        Dikembangkan menggunakan <span class="highlight">Node.Js</span> serta <span class="highlight">CSS</span><br>
-        Didukung oleh <span class="highlight">@SynthID</span>
+        <strong>Riiz - Devz</strong> dengan kerjasama dengan <span class="highlight">@SynthID</span>
     </div>
 
     <script>
-        const waNumber = '13658700681';
+        const waNumber = '6285177452460';
         let selectedItemName = '';
         let selectedItemPrice = '';
         let generatedId = '';
+        // NEW: Status upload bukti transfer
+        let isProofUploaded = false;
 
         // --- FUNGSI MODAL UMUM ---
         function closeModal(id) {
@@ -668,24 +683,48 @@
             document.getElementById('finalPrice').innerText = selectedItemPrice;
             
             const random = Math.floor(100000 + Math.random() * 900000);
-            generatedId = `LIVAID${random}`;
+            generatedId = `RIIZID${random}`; 
             document.getElementById('orderIdDisplay').innerText = generatedId;
-        }
 
-        // --- FUNGSI KONFIRMASI WA ---
+            // Reset upload status whenever modal is opened
+            isProofUploaded = false;
+            const proofUploadEl = document.getElementById('proofUpload');
+            if(proofUploadEl) proofUploadEl.value = '';
+            document.getElementById('uploadStatus').innerText = '(Wajib unggah. Maks 5MB)';
+            document.getElementById('uploadStatus').style.color = 'var(--neon-pink)';
+        }
         
-        function isBusyTime() {
-            const now = new Date();
-            const hour = now.getHours(); 
-            // Cek antara Jam 10:00 (10) dan 11:59 (11)
-            return hour >= 10 && hour < 12;
+        // NEW: Handle Image Upload
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            const statusEl = document.getElementById('uploadStatus');
+
+            if (file) {
+                if (file.size > 5 * 1024 * 1024) { 
+                    statusEl.innerText = '🚨 File terlalu besar (Maks 5MB)!';
+                    statusEl.style.color = '#ff0055'; // neon-pink
+                    isProofUploaded = false;
+                    event.target.value = ''; // Clear file input
+                    return;
+                }
+
+                statusEl.innerText = `✅ Bukti Transfer Siap Diunggah: ${file.name.substring(0, 15)}...`;
+                statusEl.style.color = '#25D366';
+                isProofUploaded = true;
+            } else {
+                statusEl.innerText = '(Wajib unggah. Maks 5MB)';
+                statusEl.style.color = '#ff0055'; // neon-pink
+                isProofUploaded = false;
+            }
         }
 
+
+        // --- FUNGSI KONFIRMASI WA (Alur Baru + Validasi Upload) ---
+        
         function updateStatus(icon, text, subtext = '', isWarning = false) {
             const iconEl = document.getElementById('confirmIcon');
             const statusEl = document.getElementById('confirmStatus');
             const subEl = document.getElementById('confirmSubtext');
-            const closeBtn = document.getElementById('closeBusyButton'); 
             
             iconEl.className = `status-icon ${isWarning ? 'warning' : ''}`;
             statusEl.className = `status-text-display ${isWarning ? 'warning' : ''}`;
@@ -699,68 +738,62 @@
             } else {
                 iconEl.classList.remove('loading-ring');
             }
-
-            closeBtn.style.display = isWarning ? 'block' : 'none';
         }
 
         function startWAConfirmation() {
+            // VALIDASI UPLOAD BUKTI
+            if (!isProofUploaded) {
+                alert("🚨 Harap unggah foto bukti transfer terlebih dahulu!");
+                return;
+            }
+            
             closeModal('modalPayment');
             document.getElementById('modalConfirmationStatus').style.display = 'flex';
-            document.getElementById('closeBusyButton').style.display = 'none'; 
-
-            // Step 1: Mengecek Admin
-            updateStatus('<i class="fa-solid fa-circle-notch"></i>', 'MENGECEK ADMIN...');
+            
+            // Step 1: Koneksi
+            updateStatus('<i class="fa-solid fa-circle-notch"></i>', 'Conneting For Ari Mustopa...');
 
             setTimeout(() => {
-                // Step 2: Memeriksa Jam Kerja
-                updateStatus('<i class="fa-solid fa-circle-notch"></i>', 'MEMERIKSA JAM KERJA...');
+                // Step 2: Status Sukses
+                updateStatus(
+                    '<i class="fa-solid fa-check-circle"></i>', 
+                    'Status Successful Connection..', 
+                    'Mempersiapkan pesan ke WhatsApp...',
+                    false
+                );
+                
+                // Build WA message with instruction to attach photo
+                const text = `Halo Admin Riiz - Devz, saya sudah melakukan pembayaran via QRIS.\n\n` +
+                             `Detail Pesanan:\n` +
+                             `- Produk: *${selectedItemName}*\n` +
+                             `- Harga: *${selectedItemPrice}*\n` +
+                             `- Kode Pesanan: *${generatedId}*\n\n` +
+                             `[PENTING] Mohon segera diproses. Saya akan *mengirimkan foto bukti transfer secara manual* di chat selanjutnya.`;
                 
                 setTimeout(() => {
-                    const isBusy = isBusyTime();
+                    // Step 3: Buka WA
+                    updateStatus(
+                        '<i class="fa-brands fa-whatsapp"></i>', 
+                        'Lanjut Buka WhatsApp', 
+                        'Mengalihkan...',
+                        false
+                    );
+                    window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`, '_blank');
+                    closeModal('modalConfirmationStatus');
+                    
+                    // Reset upload status after redirect
+                    isProofUploaded = false;
+                    const proofUploadEl = document.getElementById('proofUpload');
+                    if(proofUploadEl) proofUploadEl.value = '';
+                    document.getElementById('uploadStatus').innerText = '(Wajib unggah. Maks 5MB)';
+                    document.getElementById('uploadStatus').style.color = '#ff0055';
 
-                    if (isBusy) {
-                        // Conditional Step (Warning State: 10:00 - 11:59)
-                        updateStatus(
-                            '<i class="fa-solid fa-triangle-exclamation"></i>', 
-                            'MAAF ADMIN SIBUK!', 
-                            'Jam 10:00 - 12:00 adalah jam sibuk. Konfirmasi akan diproses secepatnya.',
-                            true // isWarning = true
-                        );
-                        return; // Stop here if busy
+                }, 1500);
 
-                    } else {
-                        // Step 3: Memeriksa format TXT
-                        updateStatus('<i class="fa-solid fa-circle-notch"></i>', 'MEMERIKSA FORMAT TXT YANG AKAN DIKIRIM...');
-
-                        setTimeout(() => {
-                            // Step 4: Selesai, Redirect
-                            updateStatus(
-                                '<i class="fa-solid fa-check-circle"></i>', 
-                                'SELESAI, SESUAI FORMAT PESANAN.', 
-                                'Mengalihkan ke WhatsApp...',
-                                false
-                            );
-                            
-                            // Build WA message
-                            const text = `Halo Admin Liviaa Store, saya sudah melakukan pembayaran via QRIS.\n\n` +
-                                         `Detail Pesanan:\n` +
-                                         `- Produk: *${selectedItemName}*\n` +
-                                         `- Harga: *${selectedItemPrice}*\n` +
-                                         `- Kode Pesanan: *${generatedId}*\n\n` +
-                                         `Mohon segera diproses.`;
-                            
-                            setTimeout(() => {
-                                window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`, '_blank');
-                                closeModal('modalConfirmationStatus');
-                            }, 2000);
-
-                        }, 2000); // End Step 4
-                    }
-                }, 2000); // End Step 2 (Jam Kerja Check)
-            }, 1500); // End Step 1 (Admin Check)
+            }, 2000); // End Step 1 (Connection Check)
         }
         
-        // --- FUNGSI BANTUAN LAIN (Tidak Direvisi) ---
+        // --- FUNGSI BANTUAN LAIN ---
         function startLiveChat() {
             const modal = document.getElementById('modalChat');
             const status = document.getElementById('chatStatus');
@@ -773,30 +806,27 @@
             status.style.color = "#fff";
 
             setTimeout(() => {
-                status.innerText = "CEK ANTRIAN...";
+                status.innerText = "Conneting For Ari Mustopa...";
+                sub.innerText = "Mohon tunggu";
             }, 2000);
 
             setTimeout(() => {
                 loader.style.display = 'none';
-                status.innerText = "TERHUBUNG!";
-                status.style.color = "#25D366";
+                status.innerText = "Status Successful Connection..";
+                status.style.color = '#00f3ff'; 
                 sub.innerText = "Mengalihkan ke WhatsApp...";
                 setTimeout(() => {
-                    window.open(`https://wa.me/${waNumber}?text=Halo%20Liviaa%20Support`, '_blank');
+                    window.open(`https://wa.me/${waNumber}?text=Halo%20Riiz%20-%20Devz%20Support`, '_blank');
                     modal.style.display = 'none';
                 }, 1500);
             }, 4000);
         }
 
         function openCheckOrder() {
-            const id = prompt("Masukkan ID Pesanan (LIVID...):");
+            const id = prompt("Masukkan ID Pesanan (RIIZID...):");
             if(id) {
                 alert(`Pesanan ${id} tidak ditemukan atau belum dibayar.`);
             }
-        }
-
-        function openGroup() {
-            window.open(`https://wa.me/${waNumber}?text=Join%20Group%20Official`, '_blank');
         }
 
         function openQuestionForm() {
