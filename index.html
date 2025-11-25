@@ -20,7 +20,6 @@
             --neon-pink: #ff0055;
             --glass-bg: rgba(20, 20, 30, 0.6);
             --glass-border: rgba(255, 255, 255, 0.1);
-            /* Tambah Warna Warning */
             --color-warning: #FFD700; 
         }
 
@@ -31,12 +30,11 @@
             color: #fff;
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
-            /* Latar belakang statis Cyberpunk */
             background: linear-gradient(rgba(5,5,5,0.8), rgba(5,5,5,0.8)), 
                         url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070') center/cover fixed;
         }
 
-        /* [CSS LAMA LAINNYA TIDAK DIREVISI] */
+        /* --- HEADER --- */
         header {
             position: fixed;
             top: 0; width: 100%;
@@ -75,7 +73,7 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* --- PRODUCTS GRID (Tidak Direvisi) --- */
+        /* --- PRODUCTS GRID --- */
         .products { padding: 50px 0; }
         
         .cards-grid {
@@ -157,7 +155,7 @@
             box-shadow: 0 0 15px var(--neon-purple);
         }
 
-        /* --- LAYANAN BANTUAN (Tidak Direvisi) --- */
+        /* --- LAYANAN BANTUAN --- */
         .services {
             padding: 50px 0 100px;
             background: rgba(0,0,0,0.5);
@@ -241,7 +239,7 @@
             font-family: 'Montserrat', sans-serif;
         }
 
-        /* --- QRIS FIX CSS (Tidak Direvisi) --- */
+        /* --- QRIS FIX CSS --- */
         .qris-container-wrapper {
             background: #fff;
             padding: 5px; 
@@ -314,6 +312,26 @@
             to { transform: scale(1.1); opacity: 0.8; }
         }
 
+        /* --- WATERMARK CSS --- */
+        .watermark {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+            background: rgba(0, 0, 0, 0.6);
+            border-top: 1px solid rgba(188, 19, 254, 0.1);
+            margin-top: 50px;
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+        }
+
+        .watermark strong {
+            color: var(--neon-blue);
+        }
+        .watermark .highlight {
+            color: var(--neon-pink);
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -515,6 +533,12 @@
         </div>
     </div>
 
+    <div class="watermark">
+        Dibuat oleh <strong>Livia</strong> dengan device <span class="highlight">Apple iOS 26</span> (<span class="highlight">iPhone 14 Pro</span>)<br>
+        Dikembangkan menggunakan <span class="highlight">Node.Js</span> serta <span class="highlight">CSS</span><br>
+        Didukung oleh <span class="highlight">@SynthID</span>
+    </div>
+
     <script>
         const waNumber = '13658700681';
         let selectedItemName = '';
@@ -643,19 +667,16 @@
             document.getElementById('modalPayment').style.display = 'flex';
             document.getElementById('finalPrice').innerText = selectedItemPrice;
             
-            // Generate Random ID LIVAIDxxxxxx
             const random = Math.floor(100000 + Math.random() * 900000);
             generatedId = `LIVAID${random}`;
             document.getElementById('orderIdDisplay').innerText = generatedId;
         }
 
-        // --- REVISI: FUNGSI KONFIRMASI WA BARU ---
+        // --- FUNGSI KONFIRMASI WA ---
         
         function isBusyTime() {
             const now = new Date();
             const hour = now.getHours(); 
-            // Cek antara Jam 10:00 (10) dan 11:59 (11)
-            // Current Time (10:23 WITA) is within this range.
             return hour >= 10 && hour < 12;
         }
 
@@ -663,7 +684,7 @@
             const iconEl = document.getElementById('confirmIcon');
             const statusEl = document.getElementById('confirmStatus');
             const subEl = document.getElementById('confirmSubtext');
-            const closeBtn = document.getElementById('closeBusyButton'); // Ambil tombol baru
+            const closeBtn = document.getElementById('closeBusyButton'); 
             
             iconEl.className = `status-icon ${isWarning ? 'warning' : ''}`;
             statusEl.className = `status-text-display ${isWarning ? 'warning' : ''}`;
@@ -678,117 +699,23 @@
                 iconEl.classList.remove('loading-ring');
             }
 
-            // Kontrol Tombol Closed
             closeBtn.style.display = isWarning ? 'block' : 'none';
         }
 
         function startWAConfirmation() {
             closeModal('modalPayment');
             document.getElementById('modalConfirmationStatus').style.display = 'flex';
-            document.getElementById('closeBusyButton').style.display = 'none'; // Sembunyikan tombol saat memulai
+            document.getElementById('closeBusyButton').style.display = 'none'; 
 
-            // Step 1: Mengecek Admin
             updateStatus('<i class="fa-solid fa-circle-notch"></i>', 'MENGECEK ADMIN...');
 
             setTimeout(() => {
-                // Step 2: Memeriksa Jam Kerja
                 updateStatus('<i class="fa-solid fa-circle-notch"></i>', 'MEMERIKSA JAM KERJA...');
                 
                 setTimeout(() => {
                     const isBusy = isBusyTime();
 
                     if (isBusy) {
-                        // Conditional Step (Warning State: 10:00 - 11:59)
                         updateStatus(
                             '<i class="fa-solid fa-triangle-exclamation"></i>', 
-                            'MAAF ADMIN SIBUK!', 
-                            'Jam 10:00 - 12:00 adalah jam sibuk. Konfirmasi akan diproses secepatnya.',
-                            true // isWarning = true
-                        );
-                        // Tombol CLOSED akan otomatis muncul karena isWarning = true
-                        return;
-
-                    } else {
-                        // Step 3: Memeriksa format TXT
-                        updateStatus('<i class="fa-solid fa-circle-notch"></i>', 'MEMERIKSA FORMAT TXT YANG AKAN DIKIRIM...');
-
-                        setTimeout(() => {
-                            // Step 4: Selesai, Redirect
-                            updateStatus(
-                                '<i class="fa-solid fa-check-circle"></i>', 
-                                'SELESAI, SESUAI FORMAT PESANAN.', 
-                                'Mengalihkan ke WhatsApp...',
-                                false
-                            );
-                            
-                            // Build WA message
-                            const text = `Halo Admin Liviaa Store, saya sudah melakukan pembayaran via QRIS.\n\n` +
-                                         `Detail Pesanan:\n` +
-                                         `- Produk: *${selectedItemName}*\n` +
-                                         `- Harga: *${selectedItemPrice}*\n` +
-                                         `- Kode Pesanan: *${generatedId}*\n\n` +
-                                         `Mohon segera diproses.`;
-                            
-                            setTimeout(() => {
-                                window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(text)}`, '_blank');
-                                closeModal('modalConfirmationStatus');
-                            }, 2000);
-
-                        }, 2000); // End Step 4
-                    }
-                }, 2000); // End Step 2 (Jam Kerja Check)
-            }, 1500); // End Step 1 (Admin Check)
-        }
-
-        // --- FUNGSI BANTUAN LAIN (Tidak Direvisi) ---
-        function startLiveChat() {
-            const modal = document.getElementById('modalChat');
-            const status = document.getElementById('chatStatus');
-            const sub = document.getElementById('chatSubtext');
-            const loader = document.getElementById('chatLoader');
-
-            modal.style.display = 'flex';
-            loader.style.display = 'inline-block';
-            status.innerText = "MENGHUBUNGKAN...";
-            status.style.color = "#fff";
-
-            setTimeout(() => {
-                status.innerText = "CEK ANTRIAN...";
-            }, 2000);
-
-            setTimeout(() => {
-                loader.style.display = 'none';
-                status.innerText = "TERHUBUNG!";
-                status.style.color = "#25D366";
-                sub.innerText = "Mengalihkan ke WhatsApp...";
-                setTimeout(() => {
-                    window.open(`https://wa.me/${waNumber}?text=Halo%20Liviaa%20Support`, '_blank');
-                    modal.style.display = 'none';
-                }, 1500);
-            }, 4000);
-        }
-
-        function openCheckOrder() {
-            const id = prompt("Masukkan ID Pesanan (LIVID...):");
-            if(id) {
-                alert(`Pesanan ${id} tidak ditemukan atau belum dibayar.`);
-            }
-        }
-
-        function openGroup() {
-            window.open(`https://wa.me/${waNumber}?text=Join%20Group%20Official`, '_blank');
-        }
-
-        function openQuestionForm() {
-            document.getElementById('modalQuestion').style.display = 'flex';
-        }
-
-        // Close outside click
-        window.onclick = function(e) {
-            if(e.target.classList.contains('modal-overlay')) {
-                e.target.style.display = 'none';
-            }
-        }
-    </script>
-</body>
-</html>
+                            'MAAF ADMIN SIBUK
